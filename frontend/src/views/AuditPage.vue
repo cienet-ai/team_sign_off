@@ -5,7 +5,7 @@
     <el-card>
       <el-form :inline="true" :model="filter" class="filter-form">
         <el-form-item label="申请状态">
-          <el-select v-model="filter.status" clearable placeholder="全部">
+          <el-select v-model="filter.status" clearable placeholder="全部" style="width: 160px">
             <el-option
               v-for="opt in STATUS_OPTIONS"
               :key="opt.value"
@@ -15,7 +15,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="操作类型">
-          <el-select v-model="filter.action" clearable placeholder="全部">
+          <el-select v-model="filter.action" clearable placeholder="全部" style="width: 160px">
             <el-option
               v-for="opt in ACTION_OPTIONS"
               :key="opt.value"
