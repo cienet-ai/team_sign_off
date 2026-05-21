@@ -17,9 +17,11 @@ RUN npm run build
 
 FROM nginx:alpine
 
+RUN apk add --no-cache openssl
+
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf.template /etc/nginx/conf.d/default.conf.template
 
-EXPOSE 80
+EXPOSE 80 443
 
-CMD /bin/sh -c "envsubst '\${KEYCLOAK_URL}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+CMD /bin/sh -c "mkdir -p /etc/nginx/ssl && openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/key.pem -out /etc/nginx/ssl/cert.pem -subj '/CN=$FRONTEND_HOST' -addext 'subjectAltName=IP:$FRONTEND_HOST' && envsubst '\${KEYCLOAK_URL}' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
